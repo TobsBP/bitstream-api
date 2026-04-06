@@ -3,6 +3,11 @@ import type { UserAchievement } from '@/types/achievement.js';
 import type { User, UserPatch } from '@/types/user.js';
 
 export const userRepository = {
+	async getAll(): Promise<User[]> {
+		const { data } = await supabaseAdmin.from('users').select('*');
+		return data ?? [];
+	},
+
 	async findById(id: string): Promise<User | null> {
 		const { data } = await supabaseAdmin
 			.from('users')

@@ -6,6 +6,17 @@ import { userSchema, userUpdateSchema } from '@/types/user.js';
 
 export const userRoutes = async (app: FastifyInstance) => {
 	app.get(
+		'/users',
+		{
+			schema: {
+				tags: ['Users'],
+				response: { 200: z.array(userSchema) },
+			},
+		},
+		userController.getAll,
+	);
+
+	app.get(
 		'/user/:id',
 		{
 			schema: {

@@ -4,6 +4,12 @@ import { userService } from '@/services/user.js';
 import type { UserUpdate } from '@/types/user.js';
 
 export const userController = {
+	async getAll(_request: FastifyRequest, reply: FastifyReply) {
+		const { data, error } = await userService.getAll();
+		if (error) return reply.status(500).send({ error });
+		return reply.status(200).send(data);
+	},
+
 	async getById(request: FastifyRequest, reply: FastifyReply) {
 		const { id } = request.params as { id: string };
 		const { data, error } = await userService.getById(id);

@@ -34,6 +34,10 @@ export const userService = {
 		return withCapture(() => userRepository.findById(id));
 	},
 
+	async getAll() {
+		return withCapture(() => userRepository.getAll());
+	},
+
 	async update(id: string, payload: UserUpdate) {
 		return withCapture(() => userRepository.update(id, payload));
 	},
