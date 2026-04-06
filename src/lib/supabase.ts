@@ -1,0 +1,23 @@
+import { createClient } from '@supabase/supabase-js';
+
+if (!process.env.SUPABASE_URL) {
+	throw new Error('SUPABASE_URL is not defined in .env');
+}
+
+if (!process.env.SUPABASE_ANON_KEY) {
+	throw new Error('SUPABASE_ANON_KEY is not defined in .env');
+}
+
+if (!process.env.SUPABASE_SERVICE_KEY) {
+	throw new Error('SUPABASE_SERVICE_KEY is not defined in .env');
+}
+
+export const supabase = createClient(
+	process.env.SUPABASE_URL,
+	process.env.SUPABASE_ANON_KEY,
+);
+
+export const supabaseAdmin = createClient(
+	process.env.SUPABASE_URL,
+	process.env.SUPABASE_SERVICE_KEY,
+);
