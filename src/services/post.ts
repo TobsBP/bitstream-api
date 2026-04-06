@@ -17,7 +17,10 @@ export const postService = {
 		return withCapture(() => postRepository.findByUserId(userId, filter));
 	},
 
-	async createPost(payload: Omit<Post, 'id' | 'created_at' | 'updated_at' | 'art_url'>, image?: Readable) {
+	async createPost(
+		payload: Omit<Post, 'id' | 'created_at' | 'updated_at' | 'art_url'>,
+		image?: Readable,
+	) {
 		return withCapture(async () => {
 			const art_url = image
 				? await uploadStream(image, 'bitstream/posts')

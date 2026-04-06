@@ -56,7 +56,8 @@ export const postRoutes = async (app: FastifyInstance) => {
 		{
 			schema: {
 				tags: ['Posts'],
-				description: 'Create a post (multipart/form-data: content, type, image?)',
+				description:
+					'Create a post (multipart/form-data: content, type, image?)',
 				response: { 201: z.object({ message: z.string() }) },
 			},
 			onRequest: [authenticate],
