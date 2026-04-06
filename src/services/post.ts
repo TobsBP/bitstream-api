@@ -36,8 +36,4 @@ export const postService = {
 	async deletePost(id: string) {
 		return withCapture(() => postRepository.delete(id));
 	},
-
-	async getFeed(userId: string) {
-		return withCapture(() => postRepository.findFeedByUserId(userId));
-	},
 };

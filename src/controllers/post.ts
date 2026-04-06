@@ -10,13 +10,6 @@ export const postController = {
 		return reply.status(200).send(data);
 	},
 
-	async getFeed(request: FastifyRequest, reply: FastifyReply) {
-		const userId = (request.user as { sub: string }).sub;
-		const { data, error } = await postService.getFeed(userId);
-		if (error) return reply.status(500).send({ error });
-		return reply.status(200).send(data);
-	},
-
 	async getById(request: FastifyRequest, reply: FastifyReply) {
 		const { id } = request.params as { id: string };
 		const { data, error } = await postService.getPostById(id);

@@ -12,19 +12,6 @@ export const postRoutes = async (app: FastifyInstance) => {
 	);
 
 	app.get(
-		'/feed',
-		{
-			schema: {
-				tags: ['Posts'],
-				description: 'Get post feed for authenticated user',
-				response: { 200: z.array(postSchema) },
-			},
-			onRequest: [authenticate],
-		},
-		postController.getFeed,
-	);
-
-	app.get(
 		'/post/:id',
 		{
 			schema: {

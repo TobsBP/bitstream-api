@@ -59,23 +59,4 @@ export const postRepository = {
 	async delete(id: string): Promise<void> {
 		await supabaseAdmin.from('posts').delete().eq('id', id);
 	},
-
-	async findFeedByUserId(userId: string): Promise<Post[]> {
-		const { data: follows } = await supabaseAdmin
-			.from('follows')
-			.select('following_id')
-			.eq('follower_id', userId);
-
-		const followingIds = follows?.map((f) => f.following_id) ?? [];
-		if (followingIds.length === 0) return [];
-
-		const { data } = await supabaseAdmin
-			.from('posts')
-			.select('*')
-			.in('user_id', followingIds)
-			.order('created_at', { ascending: false })
-			.limit(50);
-
-		return data ?? [];
-	},
 };

@@ -73,7 +73,6 @@ API docs available at `http://localhost:3333/docs`.
 | Method | Path | Auth | Description |
 |--------|------|------|-------------|
 | GET | `/posts` | — | List all posts |
-| GET | `/feed` | JWT | Authenticated user feed |
 | GET | `/post/:id` | — | Get post by ID |
 | GET | `/posts/:userId` | — | Get posts by user |
 | POST | `/post` | JWT | Create post (`multipart/form-data`) |
