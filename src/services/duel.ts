@@ -1,10 +1,8 @@
 import { withCapture } from '@/lib/sentry.js';
 import { duelRepository } from '@/repositories/duel.js';
-import { userService } from '@/services/user.js';
+import { xpService } from '@/services/xp.js';
 import type { NewDuel } from '@/types/duel.js';
-
-const VOTE_XP = 5;
-const WIN_XP = 50;
+import { VOTE_XP, WIN_XP } from '@/utils/consts/xp.js';
 
 export const duelService = {
 	async getAll() {
@@ -25,7 +23,7 @@ export const duelService = {
 			if (already) throw new Error('Already voted in this duel');
 
 			await duelRepository.vote(duelId, userId, postId);
-			await userService.addXp(userId, VOTE_XP);
+			await xpService.add(userId, VOTE_XP);
 
 			return { xp_gained: VOTE_XP };
 		});
@@ -35,7 +33,7 @@ export const duelService = {
 		return withCapture(async () => {
 			const winnerUserId = await duelRepository.getWinnerUserId(duelId);
 			if (winnerUserId) {
-				await userService.addXp(winnerUserId, WIN_XP);
+				await xpService.add(winnerUserId, WIN_XP);
 			}
 			await duelRepository.end(duelId);
 			return { ended: true };

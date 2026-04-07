@@ -53,24 +53,6 @@ export const userService = {
 		return withCapture(() => userRepository.findAchievements(userId));
 	},
 
-	async addXp(userId: string, amount: number) {
-		return withCapture(async () => {
-			const user = await userRepository.getXpData(userId);
-			if (!user) return;
-
-			const newXp = user.xp + amount;
-			if (newXp >= user.xp_max) {
-				await userRepository.updateXp(userId, {
-					xp: newXp - user.xp_max,
-					xp_max: user.xp_max + 500,
-					level: user.level + 1,
-				});
-			} else {
-				await userRepository.updateXp(userId, { xp: newXp });
-			}
-		});
-	},
-
 	async delete(id: string) {
 		return withCapture(async () => {
 			await userRepository.delete(id);

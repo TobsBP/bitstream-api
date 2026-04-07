@@ -53,22 +53,4 @@ export const userRepository = {
 		const { error } = await supabaseAdmin.from('users').delete().eq('id', id);
 		if (error) throw error;
 	},
-
-	async getXpData(
-		userId: string,
-	): Promise<{ xp: number; xp_max: number; level: number } | null> {
-		const { data } = await supabaseAdmin
-			.from('users')
-			.select('xp, xp_max, level')
-			.eq('id', userId)
-			.single();
-		return data ?? null;
-	},
-
-	async updateXp(
-		userId: string,
-		payload: { xp: number; xp_max?: number; level?: number },
-	): Promise<void> {
-		await supabaseAdmin.from('users').update(payload).eq('id', userId);
-	},
 };
