@@ -1,6 +1,6 @@
 import type { FastifyInstance } from 'fastify';
 import { z } from 'zod';
-import { userController } from '@/controllers/user.js';
+import { followerController } from '@/controllers/follower.js';
 import { authenticate } from '@/middleware/auth.js';
 import { userSchema } from '@/types/user.js';
 
@@ -14,7 +14,7 @@ export const followerRoutes = async (app: FastifyInstance) => {
 				response: { 200: z.array(userSchema) },
 			},
 		},
-		userController.getFollowers,
+		followerController.getFollowers,
 	);
 
 	app.get(
@@ -26,7 +26,7 @@ export const followerRoutes = async (app: FastifyInstance) => {
 				response: { 200: z.array(userSchema) },
 			},
 		},
-		userController.getFollowing,
+		followerController.getFollowing,
 	);
 
 	app.post(
@@ -38,6 +38,6 @@ export const followerRoutes = async (app: FastifyInstance) => {
 			},
 			onRequest: [authenticate],
 		},
-		userController.toggleFollow,
+		followerController.toggleFollow,
 	);
 };

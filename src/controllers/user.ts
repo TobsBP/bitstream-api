@@ -42,28 +42,6 @@ export const userController = {
 		return reply.status(200).send({ message: 'Avatar updated' });
 	},
 
-	async getFollowers(request: FastifyRequest, reply: FastifyReply) {
-		const { id } = request.params as { id: string };
-		const { data, error } = await userService.getFollowers(id);
-		if (error) return reply.status(500).send({ error });
-		return reply.status(200).send(data);
-	},
-
-	async getFollowing(request: FastifyRequest, reply: FastifyReply) {
-		const { id } = request.params as { id: string };
-		const { data, error } = await userService.getFollowing(id);
-		if (error) return reply.status(500).send({ error });
-		return reply.status(200).send(data);
-	},
-
-	async toggleFollow(request: FastifyRequest, reply: FastifyReply) {
-		const { id } = request.params as { id: string };
-		const followerId = (request.user as { sub: string }).sub;
-		const { data, error } = await userService.toggleFollow(followerId, id);
-		if (error) return reply.status(500).send({ error });
-		return reply.status(200).send(data);
-	},
-
 	async getAchievements(request: FastifyRequest, reply: FastifyReply) {
 		const { id } = request.params as { id: string };
 		const { data, error } = await userService.getAchievements(id);

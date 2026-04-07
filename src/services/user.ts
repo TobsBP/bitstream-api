@@ -49,26 +49,6 @@ export const userService = {
 		});
 	},
 
-	async getFollowers(id: string) {
-		return withCapture(() => userRepository.findFollowers(id));
-	},
-
-	async getFollowing(id: string) {
-		return withCapture(() => userRepository.findFollowing(id));
-	},
-
-	async toggleFollow(followerId: string, followingId: string) {
-		return withCapture(async () => {
-			const already = await userRepository.isFollowing(followerId, followingId);
-			if (already) {
-				await userRepository.unfollow(followerId, followingId);
-				return { following: false };
-			}
-			await userRepository.follow(followerId, followingId);
-			return { following: true };
-		});
-	},
-
 	async getAchievements(userId: string) {
 		return withCapture(() => userRepository.findAchievements(userId));
 	},

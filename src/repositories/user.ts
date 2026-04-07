@@ -37,46 +37,6 @@ export const userRepository = {
 		return data ?? null;
 	},
 
-	async findFollowers(id: string): Promise<User[]> {
-		const { data } = await supabaseAdmin
-			.from('follows')
-			.select('users!follower_id(*)')
-			.eq('following_id', id);
-		return data?.map((r: { users: unknown }) => r.users as User) ?? [];
-	},
-
-	async findFollowing(id: string): Promise<User[]> {
-		const { data } = await supabaseAdmin
-			.from('follows')
-			.select('users!following_id(*)')
-			.eq('follower_id', id);
-		return data?.map((r: { users: unknown }) => r.users as User) ?? [];
-	},
-
-	async isFollowing(followerId: string, followingId: string): Promise<boolean> {
-		const { data } = await supabaseAdmin
-			.from('follows')
-			.select('follower_id')
-			.eq('follower_id', followerId)
-			.eq('following_id', followingId)
-			.single();
-		return !!data;
-	},
-
-	async follow(followerId: string, followingId: string): Promise<void> {
-		await supabaseAdmin
-			.from('follows')
-			.upsert({ follower_id: followerId, following_id: followingId });
-	},
-
-	async unfollow(followerId: string, followingId: string): Promise<void> {
-		await supabaseAdmin
-			.from('follows')
-			.delete()
-			.eq('follower_id', followerId)
-			.eq('following_id', followingId);
-	},
-
 	async findAchievements(userId: string): Promise<UserAchievement[]> {
 		const { data } = await supabaseAdmin
 			.from('user_achievements')
