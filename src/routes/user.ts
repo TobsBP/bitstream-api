@@ -77,4 +77,18 @@ export const userRoutes = async (app: FastifyInstance) => {
 		},
 		userController.getPosts,
 	);
+
+	app.delete(
+		'/user/:id',
+		{
+			schema: {
+				tags: ['Users'],
+				description: 'Delete a user account',
+				params: z.object({ id: z.uuid() }),
+				response: { 200: z.object({ message: z.string() }) },
+			},
+			onRequest: [authenticate],
+		},
+		userController.delete,
+	);
 };

@@ -78,4 +78,17 @@ export const userController = {
 		if (error) return reply.status(500).send({ error });
 		return reply.status(200).send(data);
 	},
+
+	async delete(request: FastifyRequest, reply: FastifyReply) {
+		const { id } = request.params as { id: string };
+		const userId = (request.user as { sub: string }).sub;
+		if (userId !== id) return reply.status(403).send({ error: 'Forbidden' });
+
+		const { data: user } = await userService.getById(id);
+		if (!user) return reply.status(404).send({ error: 'User not found' });
+
+		const { error } = await userService.delete(id);
+		if (error) return reply.status(500).send({ error });
+		return reply.status(200).send({ message: 'User deleted' });
+	},
 };

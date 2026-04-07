@@ -89,6 +89,11 @@ export const userRepository = {
 		})) ?? []) as unknown as UserAchievement[];
 	},
 
+	async delete(id: string): Promise<void> {
+		const { error } = await supabaseAdmin.from('users').delete().eq('id', id);
+		if (error) throw error;
+	},
+
 	async addXp(userId: string, amount: number): Promise<void> {
 		const { data: user } = await supabaseAdmin
 			.from('users')

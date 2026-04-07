@@ -38,4 +38,34 @@ export const collectionController = {
 		if (error) return reply.status(500).send({ error });
 		return reply.status(200).send({ message: 'Post added to collection' });
 	},
+
+	async delete(request: FastifyRequest, reply: FastifyReply) {
+		const { id } = request.params as { id: string };
+		const userId = (request.user as { sub: string }).sub;
+
+		const { data: collection } = await collectionService.getById(id);
+		if (!collection)
+			return reply.status(404).send({ error: 'Collection not found' });
+		if (collection.creator_id !== userId)
+			return reply.status(403).send({ error: 'Forbidden' });
+
+		const { error } = await collectionService.delete(id);
+		if (error) return reply.status(500).send({ error });
+		return reply.status(200).send({ message: 'Collection deleted' });
+	},
+
+	async removePost(request: FastifyRequest, reply: FastifyReply) {
+		const { id, postId } = request.params as { id: string; postId: string };
+		const userId = (request.user as { sub: string }).sub;
+
+		const { data: collection } = await collectionService.getById(id);
+		if (!collection)
+			return reply.status(404).send({ error: 'Collection not found' });
+		if (collection.creator_id !== userId)
+			return reply.status(403).send({ error: 'Forbidden' });
+
+		const { error } = await collectionService.removePost(id, postId);
+		if (error) return reply.status(500).send({ error });
+		return reply.status(200).send({ message: 'Post removed from collection' });
+	},
 };

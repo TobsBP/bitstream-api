@@ -72,4 +72,11 @@ export const userService = {
 	async getAchievements(userId: string) {
 		return withCapture(() => userRepository.findAchievements(userId));
 	},
+
+	async delete(id: string) {
+		return withCapture(async () => {
+			await userRepository.delete(id);
+			await supabaseAdmin.auth.admin.deleteUser(id);
+		});
+	},
 };

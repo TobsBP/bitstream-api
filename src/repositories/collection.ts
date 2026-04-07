@@ -45,4 +45,21 @@ export const collectionRepository = {
 			.order('created_at', { ascending: false });
 		return data ?? [];
 	},
+
+	async delete(id: string): Promise<void> {
+		const { error } = await supabaseAdmin
+			.from('collections')
+			.delete()
+			.eq('id', id);
+		if (error) throw error;
+	},
+
+	async removePost(collectionId: string, postId: string): Promise<void> {
+		const { error } = await supabaseAdmin
+			.from('posts')
+			.update({ collection_id: null })
+			.eq('id', postId)
+			.eq('collection_id', collectionId);
+		if (error) throw error;
+	},
 };

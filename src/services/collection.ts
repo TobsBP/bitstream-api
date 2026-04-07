@@ -25,4 +25,14 @@ export const collectionService = {
 			collectionRepository.addPost(collectionId, postId),
 		);
 	},
+
+	async delete(id: string) {
+		return withCapture(() => collectionRepository.delete(id));
+	},
+
+	async removePost(collectionId: string, postId: string) {
+		return withCapture(() =>
+			collectionRepository.removePost(collectionId, postId),
+		);
+	},
 };

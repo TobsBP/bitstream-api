@@ -61,4 +61,32 @@ export const collectionRoutes = async (app: FastifyInstance) => {
 		},
 		collectionController.addPost,
 	);
+
+	app.delete(
+		'/collection/:id',
+		{
+			schema: {
+				tags: ['Collections'],
+				description: 'Delete a collection',
+				params: z.object({ id: z.uuid() }),
+				response: { 200: z.object({ message: z.string() }) },
+			},
+			onRequest: [authenticate],
+		},
+		collectionController.delete,
+	);
+
+	app.delete(
+		'/collection/:id/post/:postId',
+		{
+			schema: {
+				tags: ['Collections'],
+				description: 'Remove a post from a collection',
+				params: z.object({ id: z.uuid(), postId: z.uuid() }),
+				response: { 200: z.object({ message: z.string() }) },
+			},
+			onRequest: [authenticate],
+		},
+		collectionController.removePost,
+	);
 };
