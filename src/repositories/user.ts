@@ -94,26 +94,21 @@ export const userRepository = {
 		if (error) throw error;
 	},
 
-	async addXp(userId: string, amount: number): Promise<void> {
-		const { data: user } = await supabaseAdmin
+	async getXpData(
+		userId: string,
+	): Promise<{ xp: number; xp_max: number; level: number } | null> {
+		const { data } = await supabaseAdmin
 			.from('users')
 			.select('xp, xp_max, level')
 			.eq('id', userId)
 			.single();
-		if (!user) return;
+		return data ?? null;
+	},
 
-		const newXp = user.xp + amount;
-		if (newXp >= user.xp_max) {
-			await supabaseAdmin
-				.from('users')
-				.update({
-					xp: newXp - user.xp_max,
-					xp_max: user.xp_max + 500,
-					level: user.level + 1,
-				})
-				.eq('id', userId);
-		} else {
-			await supabaseAdmin.from('users').update({ xp: newXp }).eq('id', userId);
-		}
+	async updateXp(
+		userId: string,
+		payload: { xp: number; xp_max?: number; level?: number },
+	): Promise<void> {
+		await supabaseAdmin.from('users').update(payload).eq('id', userId);
 	},
 };

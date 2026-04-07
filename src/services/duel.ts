@@ -1,7 +1,6 @@
 import { withCapture } from '@/lib/sentry.js';
-import { supabaseAdmin } from '@/lib/supabase.js';
 import { duelRepository } from '@/repositories/duel.js';
-import { userRepository } from '@/repositories/user.js';
+import { userService } from '@/services/user.js';
 import type { NewDuel } from '@/types/duel.js';
 
 const VOTE_XP = 5;
@@ -26,7 +25,7 @@ export const duelService = {
 			if (already) throw new Error('Already voted in this duel');
 
 			await duelRepository.vote(duelId, userId, postId);
-			await userRepository.addXp(userId, VOTE_XP);
+			await userService.addXp(userId, VOTE_XP);
 
 			return { xp_gained: VOTE_XP };
 		});
@@ -34,16 +33,9 @@ export const duelService = {
 
 	async end(duelId: string) {
 		return withCapture(async () => {
-			const winnerPostId = await duelRepository.getWinnerId(duelId);
-			if (winnerPostId) {
-				const { data: post } = await supabaseAdmin
-					.from('posts')
-					.select('user_id')
-					.eq('id', winnerPostId)
-					.single();
-				if (post?.user_id) {
-					await userRepository.addXp(post.user_id, WIN_XP);
-				}
+			const winnerUserId = await duelRepository.getWinnerUserId(duelId);
+			if (winnerUserId) {
+				await userService.addXp(winnerUserId, WIN_XP);
 			}
 			await duelRepository.end(duelId);
 			return { ended: true };

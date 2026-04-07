@@ -69,6 +69,29 @@ export const duelRepository = {
 		await supabaseAdmin.from('duels').update({ status: 'ended' }).eq('id', id);
 	},
 
+	async getWinnerUserId(duelId: string): Promise<string | null> {
+		const { data } = await supabaseAdmin
+			.from('duel_votes')
+			.select('post_id')
+			.eq('duel_id', duelId);
+		if (!data || data.length === 0) return null;
+
+		const counts: Record<string, number> = {};
+		for (const { post_id } of data) {
+			counts[post_id] = (counts[post_id] ?? 0) + 1;
+		}
+		const winnerPostId =
+			Object.entries(counts).sort((a, b) => b[1] - a[1])[0]?.[0] ?? null;
+		if (!winnerPostId) return null;
+
+		const { data: post } = await supabaseAdmin
+			.from('posts')
+			.select('user_id')
+			.eq('id', winnerPostId)
+			.single();
+		return post?.user_id ?? null;
+	},
+
 	async getWinnerId(id: string): Promise<string | null> {
 		const { data } = await supabaseAdmin
 			.from('duel_votes')
